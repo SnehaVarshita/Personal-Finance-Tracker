@@ -17,33 +17,30 @@ app.use(cors({
 
 // Static files with cache control
 app.use(express.static(path.join(__dirname, 'public'), {
-  maxAge: '1d', // Cache static assets
-  setHeaders: (res, path) => {
-    if (path.endsWith('.html')) {
+  maxAge: '1d',
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
       res.setHeader('Cache-Control', 'no-cache');
     }
   }
-});
+}));
 
-app.use(express.json({ limit: '10kb' })); // Limit payload size
+app.use(express.json({ limit: '10kb' }));
 
 // Mobile optimization middleware
 app.use((req, res, next) => {
-  // Force HTTPS on production
   if (process.env.NODE_ENV === 'production' && req.headers['x-forwarded-proto'] !== 'https') {
     return res.redirect(`https://${req.headers.host}${req.url}`);
   }
-  
-  // Optimize for mobile
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
   next();
 });
 
-// In-memory database with persistence example
+// In-memory database
 let transactions = [];
 
-// API Routes with mobile-friendly responses
+// API Routes
 app.get('/api/transactions', (req, res) => {
   res.json({
     status: 'success',
@@ -54,9 +51,9 @@ app.get('/api/transactions', (req, res) => {
 
 app.post('/api/transactions', (req, res) => {
   const { amount, description, date, type, category } = req.body;
-  
-  // Enhanced validation
-  if (!amount || isNaN(amount) {
+
+  // ✅ Fixed parenthesis here
+  if (!amount || isNaN(amount)) {
     return res.status(400).json({ 
       status: 'fail',
       message: 'Amount must be a valid number'
@@ -79,17 +76,17 @@ app.post('/api/transactions', (req, res) => {
 
   const newTransaction = {
     id: Date.now().toString(),
-    amount: parseFloat(amount.toFixed(2)), // Ensure 2 decimal places
+    amount: parseFloat(amount.toFixed(2)),
     description: description.trim(),
     date: date || new Date().toISOString(),
-    type: type === 'income' ? 'income' : 'expense', // Enforce valid types
-    category: ['food', 'transport', 'housing', 'entertainment', 'other'].includes(category) 
-      ? category 
+    type: type === 'income' ? 'income' : 'expense',
+    category: ['food', 'transport', 'housing', 'entertainment', 'other'].includes(category)
+      ? category
       : 'other'
   };
-  
+
   transactions.push(newTransaction);
-  
+
   res.status(201).json({
     status: 'success',
     data: newTransaction
@@ -99,21 +96,21 @@ app.post('/api/transactions', (req, res) => {
 app.delete('/api/transactions/:id', (req, res) => {
   const initialLength = transactions.length;
   transactions = transactions.filter(t => t.id !== req.params.id);
-  
+
   if (transactions.length === initialLength) {
     return res.status(404).json({
       status: 'fail',
       message: 'Transaction not found'
     });
   }
-  
+
   res.json({
     status: 'success',
     data: null
   });
 });
 
-// Health check endpoint for monitoring
+// Health check
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'healthy',
@@ -122,7 +119,7 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Serve frontend with mobile caching headers
+// Serve frontend
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'), {
     headers: {
@@ -133,7 +130,7 @@ app.get('*', (req, res) => {
   });
 });
 
-// Error handling middleware
+// Error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({
