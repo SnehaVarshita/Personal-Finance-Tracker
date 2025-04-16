@@ -7,26 +7,14 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
-//app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 // In-memory database
 let transactions = [];
-let budgets = {
-  food: 5000,
-  transport: 3000,
-  housing: 10000,
-  entertainment: 2000,
-  other: 3000
-};
 
 // API Routes
 app.get('/api/transactions', (req, res) => {
   res.json(transactions);
-});
-
-app.get('/api/budgets', (req, res) => {
-  res.json(budgets);
 });
 
 app.post('/api/transactions', (req, res) => {
@@ -51,16 +39,6 @@ app.post('/api/transactions', (req, res) => {
   
   transactions.push(newTransaction);
   res.status(201).json(newTransaction);
-});
-
-app.put('/api/budgets', (req, res) => {
-  const newBudgets = req.body;
-  if (!newBudgets) {
-    return res.status(400).json({ error: 'Invalid budgets data' });
-  }
-  
-  budgets = { ...budgets, ...newBudgets };
-  res.json(budgets);
 });
 
 app.delete('/api/transactions/:id', (req, res) => {
