@@ -1,3 +1,9 @@
+console.log("Script loaded!");
+
+// Debug DOM elements
+console.log("Add Transaction Button:", document.getElementById('addTransactionBtn'));
+console.log("Transaction Modal:", document.getElementById('transactionModal'));
+console.log("Budget Modal:", document.getElementById('budgetModal'));
 // DOM Elements
 const addTransactionBtn = document.getElementById('addTransactionBtn');
 const modal = document.getElementById('transactionModal');
