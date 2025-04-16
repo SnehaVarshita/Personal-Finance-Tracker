@@ -115,12 +115,6 @@
     gap: 20px;
   }
   
-  .chart-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-  
   .section-header {
     display: flex;
     justify-content: space-between;
@@ -417,23 +411,6 @@
     width: 100%;
   }
   
-  .empty-state {
-    text-align: center;
-    color: var(--gray-color);
-    padding: 20px 0;
-  }
-  
-  .budget-form-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    align-items: center;
-  }
-  
-  .budget-form-group label {
-    margin-bottom: 0;
-  }
-  
   /* Animations */
   @keyframes fadeIn {
     from {
@@ -453,10 +430,6 @@
   /* Responsive Design */
   @media (max-width: 768px) {
     .main-content {
-      grid-template-columns: 1fr;
-    }
-    
-    .chart-grid {
       grid-template-columns: 1fr;
     }
     
@@ -480,9 +453,5 @@
     
     .card {
       padding: 15px;
-    }
-    
-    .budget-form-group {
-      grid-template-columns: 1fr;
     }
   }
